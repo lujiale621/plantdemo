@@ -1,11 +1,16 @@
+<style scoped>
+.chart{
+    width: 100%;
+    height: 220px;
+}
+</style>
 <template>
 <div>
-      <div id="echarts-dom" :style="{width: '1000px', height: '300px'}"></div>
-  <Table border :columns="columns5" :data="data5"></Table>
+      <div id="echarts-dom" class="chart"></div>
+  <div class="table"><Table border :columns="columns5" :data="data5"></Table></div>
 </div>
 </template>
 <script>
-
 export default {
   data() {
     return {
@@ -148,7 +153,6 @@ export default {
         }
     ]
 };
-
      myChart.setOption(option);
     }
   }

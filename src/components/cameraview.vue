@@ -1,5 +1,7 @@
 <template>
-  
+    <div>
+     放摄像头
+  </div>
 </template>
 
 <script>

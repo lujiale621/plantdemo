@@ -1,70 +1,96 @@
 <template>
-<div class="layout">
-        <Layout>
-            <Header>
-                <Menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
-                    <div class="layout-nav">
-                        <MenuItem name="1">
-                            <Icon type="ios-navigate"></Icon>
-                            Item 1
-                        </MenuItem>
-                        <MenuItem name="2">
-                            <Icon type="ios-keypad"></Icon>
-                            Item 2
-                        </MenuItem>
-                        <MenuItem name="3" >
-                            <Icon type="ios-analytics"></Icon>
-                            Item 3
-    
-                        </MenuItem>
-                        <MenuItem name="4">
-                            <Icon type="ios-paper"></Icon>
-                            Item 4
-                        </MenuItem>
-                    </div>
-                </Menu>
-            </Header>
-            <Layout>
-                <Sider hide-trigger :style="{background: '#fff'}">
-                    <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
-                        <Submenu name="1">
-                            <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                植物详情
-                            </template>
-                            <MenuItem name="1-1" :to="{ path: '/planthealth' }">健康状况</MenuItem>
-                            <MenuItem name="1-2" :to="{ path: '/plantdata' }">事件日志</MenuItem>
-        
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                环境监视
-                            </template>
-                            <MenuItem name="2-1" :to="{ path: '/camera' }">环境观察</MenuItem>
-                            <MenuItem name="2-2" :to="{ path: '/dashboard' }">控制台</MenuItem>
-                        </Submenu>
-                    </Menu>
-                </Sider>
-                <Layout :style="{padding: '0 24px 24px'}">
-               
-                    <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
-                        <router-view/>
-                    </Content>
-                </Layout>
-            </Layout>
-        </Layout>
-    </div>
+  <div>
+    <el-container>
+      <el-header>
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          background-color="#545c64"
+          @select="handleSelect"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-menu-item index="1" :to="{ path: '/boardbash' }">控制台</el-menu-item>
+          <el-menu-item index="2" :to="{ path: '/plantdetail' }">植物详情</el-menu-item>
+          <el-menu-item index="3" :to="{ path: '/cameraview' }">环境监视</el-menu-item>
+            <el-menu-item index="4" :to="{ path: '/logdata' }">日志</el-menu-item>
+        </el-menu>
+      </el-header>
+      <el-main>
+        <router-view />
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
 export default {
-name:'home',
-
-}
+  name: "home",
+  data() {
+    return {
+      activeIndex: "1"
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+      if(key==4){
+           this.$router.push({
+          path: "/logdata"
+        });
+      }
+      else if (key == 3) {
+        this.$router.push({
+          path: "/cameraview"
+        });
+      } else if (key == 2) {
+        this.$router.push({
+          path: "/plantdetail"
+        });
+      } else if (key == 1) {
+        this.$router.push({
+          path: "/boardbash"
+        });
+      }
+    }
+  }
+};
 </script>
 
 <style  scoped>
+.el-header,
+.el-footer {
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+  background-color: #545c64;
+  padding: 0px;
+}
 
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
+
+.el-main {
+
+  text-align: center;
+
+}
+
+body > .el-container {
+  margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+  line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+  line-height: 320px;
+}
 </style>
