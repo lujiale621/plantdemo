@@ -14,7 +14,6 @@
           <el-menu-item index="1" :to="{ path: '/boardbash' }">控制台</el-menu-item>
           <el-menu-item index="2" :to="{ path: '/plantdetail' }">植物详情</el-menu-item>
           <el-menu-item index="3" :to="{ path: '/cameraview' }">环境监视</el-menu-item>
-            <el-menu-item index="4" :to="{ path: '/logdata' }">日志</el-menu-item>
         </el-menu>
       </el-header>
       <el-main>
@@ -35,12 +34,11 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
-      if(key==4){
-           this.$router.push({
+      if (key == 4) {
+        this.$router.push({
           path: "/logdata"
         });
-      }
-      else if (key == 3) {
+      } else if (key == 3) {
         this.$router.push({
           path: "/cameraview"
         });
@@ -76,9 +74,7 @@ export default {
 }
 
 .el-main {
-
   text-align: center;
-
 }
 
 body > .el-container {

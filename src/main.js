@@ -5,17 +5,18 @@ import App from './App'
 import router from './router'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
-import Vant from 'vant';
-
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import 'vant/lib/index.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
+Vue.use(Vant);
 Vue.prototype.$http = axios
 Vue.use(VueAxios,axios);
 Vue.use(ViewUI);
-Vue.use(Vant);
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 

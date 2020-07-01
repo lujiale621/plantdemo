@@ -4,18 +4,18 @@
       <div class="card">
         <Card>
           <Row>
-            <Col span="12">
+            <Col span="10">
               <img class="icon" src="../assets/plant.jpg" />
             </Col>
-            <Col span="12">
+            <Col span="10">
               <div class="wendu">
-                <Progress vertical :percent="45" status="active" />
+                <Progress vertical :percent="hum" status="active" />
               </div>
             </Col>
           </Row>
           <Row>
             <Col span="14">
-              <div class="text">No:1</div>
+              <div class="text">No:{{number}}</div>
             </Col>
             <Col span="10">
               <div class="text">湿度</div>
@@ -29,7 +29,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+    props: {
+    number: '',
+    hum:''
+  },
+};
 </script>
 
 <style scoped>
