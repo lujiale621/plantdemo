@@ -44,7 +44,7 @@ export default {
 }
 .wendu {
   height: 60px;
-  padding-left: 30px;
+  padding-left: 20px;
 }
 .text {
   padding-top: 10px;

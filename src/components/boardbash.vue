@@ -1,30 +1,31 @@
 <template>
-<div>
-    <div class="layout">
-    <el-row>
-      <el-button type="primary" round @click="execute(1,1)">打浇灌器</el-button>
-      <el-button type="primary" round @click="execute(1,0)">关浇灌器</el-button>
-      <el-button type="success" round @click="execute(2,1)">开浇灌器2</el-button>
-      <el-button type="success" round @click="execute(2,0)">关浇灌器2</el-button>
-      <el-button type="warning" round @click="execute(3,1)">开继电器3</el-button>
-      <el-button type="warning" round @click="execute(3,0)">关继电器3</el-button>
-      <el-button type="danger" round @click="execute(4,1)">开继电器4</el-button>
-      <el-button type="danger" round @click="execute(4,0)">关继电器4</el-button>
-    </el-row>
-  </div>
   <div>
-    <div id="echarts-dom" class="chart"></div>
-    <div class="table">
-      <Table border :columns="columns5" :data="data5"></Table>
+    <div class="layout">
+      <el-row>
+        <el-button type="primary" round @click="execute(1,1)">关浇灌器</el-button>
+        <el-button type="primary" round @click="execute(1,0)">开浇灌器</el-button>
+        <el-button type="success" round @click="execute(2,1)">关浇灌器2</el-button>
+        <el-button type="success" round @click="execute(2,0)">开浇灌器2</el-button>
+        <el-button type="warning" round @click="execute(3,1)">关继电器3</el-button>
+        <el-button type="warning" round @click="execute(3,0)">开继电器3</el-button>
+        <el-button type="danger" round @click="execute(4,1)">关继电器4</el-button>
+        <el-button type="danger" round @click="execute(4,0)">开继电器4</el-button>
+      </el-row>
+    </div>
+    <div>
+      <div id="echarts-dom" class="chart"></div>
+      <div class="table">
+        <Table border :columns="columns5" :data="data5"></Table>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      date: "",
       plantlog: "",
       columns5: [
         {
@@ -150,10 +151,31 @@ export default {
     };
   },
   mounted() {
+    this.drawLine();
     this.loadlog();
     this.loadchart();
+    this.timer = setInterval(() => {
+      this.drawLine();
+      this.loadlog();
+      this.loadchart();
+    }, 10000);
+  },
+  destroyed() {
+    clearInterval(this.timer);
   },
   methods: {
+    insertevent(et) {
+      var self = this;
+      let t = new Date().toUTCString();
+      var value = "getdata/event/insert";
+      console.log(et)
+      this.axios.get(value, {
+        params: {
+          date: t,
+          event: et
+        }
+      });
+    },
     drawLine() {
       var echarts = require("echarts");
       // 基于准备好的dom，初始化echarts实例
@@ -188,22 +210,36 @@ export default {
         });
     },
     execute: function(dev, flag) {
-      var par = "";
+      var par = ""
+      var parlog=''
+      var devlog=''
       if (flag == 0) {
         par = "open";
+        parlog="关闭"
       } else {
         par = "close";
+        parlog="打开"
       }
       var value = "api/";
       if (dev == 1) {
         value = value + "pumb";
+        devlog="浇灌器1"
+
       } else if (dev == 2) {
         value = value + "pumb2";
+          devlog="浇灌器2"
+
       } else if (dev == 3) {
         value = value + "spray";
+          devlog="雾化器1"
+
       } else if (dev == 4) {
         value = value + "moudle";
+          devlog="继电器4"
+
       }
+      let st=parlog+devlog
+      this.insertevent(st)
       this.axios.get(value, {
         params: {
           msg: par

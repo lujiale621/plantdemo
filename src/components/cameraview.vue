@@ -1,17 +1,57 @@
 <template>
   <div class="layout">
     <el-row>
-      <el-col :span="8">
-        <van-circle v-model="currentRate" :rate="30" :color="gradientColor" text="光照强度" />
+      <el-col :span="6">
+        <van-circle
+          size="80px"
+          :stroke-width="50"
+          v-model="light"
+          :rate="100"
+          :speed="3"
+          :color="gradientColor"
+          text="光照强度"
+        />
       </el-col>
-      <el-col :span="8">
-        <van-circle v-model="currentRate" :rate="40" :color="gradientColor" text="温度:" />
+      <el-col :span="6">
+        <van-circle
+          size="80px"
+          :stroke-width="50"
+          v-model="temp"
+          :rate="100"
+          :speed="3"
+          :color="gradientColor"
+          text="温度:"
+        />
       </el-col>
-      <el-col :span="8">
-        <van-circle v-model="currentRate" :rate="50" :color="gradientColor" text="湿度:" />
+      <el-col :span="6">
+        <van-circle
+          size="80px"
+          :stroke-width="50"
+          v-model="mid"
+          :rate="100"
+          :speed="3"
+          :color="gradientColor"
+          text="湿度:"
+        />
+      </el-col>
+      <el-col :span="6">
+        <van-circle
+          size="80px"
+          :stroke-width="50"
+          v-model="deep"
+          :rate="100"
+          :speed="3"
+          :color="gradientColor"
+          text="水槽含水量:"
+        />
       </el-col>
     </el-row>
-
+    <el-row>
+      <el-col class="reg" :span="6">{{light}}LX</el-col>
+      <el-col class="reg" :span="6">{{temp}}°C</el-col>
+      <el-col class="reg" :span="6">{{mid}}%rh</el-col>
+      <el-col class="reg" :span="6">{{deep}}</el-col>
+    </el-row>
     <div id="echarts-dom" class="chart"></div>
   </div>
 </template>
@@ -20,14 +60,18 @@
 export default {
   data() {
     return {
-      currentRate: 0,
+      light: "50",
+      temp: "20",
+      mid: "40",
+      deep: "90",
+      currentRate: 10,
       gradientColor: {
         "0%": "#3fecff",
         "100%": "#6149f6"
       },
       option: {
         title: {
-          text: "折线图堆叠"
+          text: "历史"
         },
         tooltip: {
           trigger: "axis"
@@ -86,8 +130,17 @@ export default {
     };
   },
   mounted() {
+    this.drawLine();
     this.loadchart();
     this.loaddata();
+    this.timer = setInterval(() => {
+      this.drawLine();
+      this.loadchart();
+      this.loaddata();
+    }, 10000);
+  },
+  destroyed() {
+    clearInterval(this.timer);
   },
   methods: {
     drawLine() {
@@ -97,15 +150,19 @@ export default {
       console.log(this.option.series);
       myChart.setOption(this.option);
     },
-    loaddata(){
-            var self = this;
-      var value = "getdata/event/all";
+    loaddata() {
+      var self = this;
+      var value = "getdata/penzai/one";
       this.axios
         .get(value, {
           params: {}
         })
         .then(function(rest) {
           console.log(rest.data);
+          self.light = rest.data.light;
+          self.temp = rest.data.tem;
+          self.mid = rest.data.ambhum;
+          self.deep = rest.data.depth;
         });
     },
     loadchart() {
@@ -120,6 +177,7 @@ export default {
           self.option.series = rest.data;
           console.log(rest.data);
           console.log(self.option.series);
+          self.drawLine();
         });
     }
   }
@@ -129,6 +187,8 @@ export default {
 <style scoped>
 .layout {
   line-height: 100px;
+  padding: 0px;
+  margin: 0px;
 }
 .chart {
   width: 100%;
@@ -137,5 +197,15 @@ export default {
 .pro {
   height: 300px;
   width: 100%;
+}
+.el-col {
+  height: 80px;
+}
+.reg {
+  color: aqua;
+  line-height: 50px;
+  height: 50px;
+  padding: 0px;
+  margin: 0px;
 }
 </style>
